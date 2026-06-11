@@ -75,6 +75,10 @@ public:
   void clearAllData() {
     std::remove("test.txt");
     std::remove("otherdata.txt");
+    std::ofstream ofile("test.txt");
+    std::ofstream mdata("otherdata.txt");
+    mdata.close();
+    ofile.close();
   }
 };
 
