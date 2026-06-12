@@ -1,8 +1,5 @@
 # Ignore the automated data files your program creates
 test.txt
-otherdata.txt
-temp_test.txt
-temp_otherdata.txt
 
 # Ignore compiled executables (so you don't upload unreadable binary code)
 *.exe
