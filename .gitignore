@@ -1,5 +1,6 @@
 # Ignore the automated data files your program creates
 test.txt
+nctest.cpp
 
 # Ignore compiled executables (so you don't upload unreadable binary code)
 *.exe

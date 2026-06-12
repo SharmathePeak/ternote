@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
-// #include <iterator>
 #include <string>
 #include <vector>
 
@@ -33,20 +32,25 @@ public:
 
     return 1;
   }
+};
 
-  void loadData(int nn) {
-    int i = 0;
-    std::string line;
-    std::ifstream ifile("test.txt");
-    while (std::getline(ifile, line)) {
-      if (line == "--NOTE--") {
-        i++;
-      } else if (i == nn) {
-        std::cout << line << std::endl;
+void loadAllData() {
+  int i = 0;
+  int fl = false;
+  std::string line;
+  std::ifstream ifile("test.txt");
+  while (std::getline(ifile, line)) {
+    if (line == "--NOTE--") {
+      fl = false;
+      i++;
+    } else {
+      if (fl == false) {
+        std::cout << i << "." << line << std::endl;
+        fl = true;
       }
     }
   }
-};
+}
 
 void clearAllData() { std::remove("test.txt"); }
 
@@ -65,14 +69,21 @@ void addNote(std::vector<Notes> &n) {
   n.back().newNote();
 }
 
+void loadData(std::vector<Notes> &n, int nn) {
+  if (nn < n.size()) {
+    std::cout << n[nn].data;
+  }
+}
+
 int main() {
   std::vector<Notes> n;
   clearAllData();
   addNote(n);
   addNote(n);
   addNote(n);
-  std::cout << n[1].data;
+  loadData(n, 1);
   delNote(n, 1);
-  std::cout << n[1].data;
+  loadData(n, 1);
+  loadAllData();
   return 0;
 }
