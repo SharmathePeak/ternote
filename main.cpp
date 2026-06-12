@@ -1,14 +1,15 @@
+#include <cstdio>
 #include <fstream>
 #include <iostream>
+// #include <iterator>
 #include <string>
+#include <vector>
 
 class Notes {
 public:
-  std::string date;
   std::string data;
 
   int newNote() {
-    int i = 0;
     std::string line;
 
     std::ofstream ofile("test.txt", std::ios::app);
@@ -20,74 +21,58 @@ public:
       }
     }
 
-    std::ofstream mdata("otherdata.txt", std::ios::app);
-    if (!mdata.is_open()) {
-      mdata.open("otherdata.txt");
-      if (!mdata.is_open()) {
-        std::cout << "Cant open file!!" << std::endl;
-        ofile.close();
-        return 0;
-      }
-    }
-
     while (std::getline(std::cin, line)) {
-      if (line != "end") {
-        ofile << line << std::endl;
-        i++;
-      } else {
+      if (line == "end")
         break;
-      }
+      data += line + '\n';
     }
+    ofile << "--NOTE--\n";
+    ofile << data;
 
-    mdata << i << std::endl;
-
-    mdata.close();
     ofile.close();
 
     return 1;
   }
+
   void loadData(int nn) {
-    int s_line = 0;
-    int linesize = 0;
+    int i = 0;
     std::string line;
-    std::ifstream mdata("otherdata.txt");
     std::ifstream ifile("test.txt");
-
-    for (int i = 0; i <= nn - 2; i++) {
-      int l = s_line;
-      mdata >> s_line >> linesize;
-      s_line += l;
-    }
-
-    for (int i = 0; i < s_line; i++) {
-      std::getline(ifile, line);
-    }
-
-    // this->data = "";
-
     while (std::getline(ifile, line)) {
-      data.append(line + "\n");
+      if (line == "--NOTE--") {
+        i++;
+      } else if (i == nn) {
+        std::cout << line << std::endl;
+      }
     }
-    std::cout << data;
-    mdata.close();
-    ifile.close();
-  }
-  void clearAllData() {
-    std::remove("test.txt");
-    std::remove("otherdata.txt");
-    std::ofstream ofile("test.txt");
-    std::ofstream mdata("otherdata.txt");
-    mdata.close();
-    ofile.close();
   }
 };
 
+void clearAllData() { std::remove("test.txt"); }
+
+void delNote(std::vector<Notes> &n, int i) {
+  int line = 0;
+  n.erase(n.begin() + i);
+  std::ofstream ofile("test.txt", std::ios::trunc);
+  for (auto &note : n) {
+    ofile << "--NOTE--\n";
+    ofile << note.data;
+  }
+}
+
+void addNote(std::vector<Notes> &n) {
+  n.emplace_back();
+  n.back().newNote();
+}
+
 int main() {
-  Notes n;
-  n.clearAllData();
-  n.newNote();
-  n.newNote();
-  n.loadData(2);
-  n.clearAllData();
+  std::vector<Notes> n;
+  clearAllData();
+  addNote(n);
+  addNote(n);
+  addNote(n);
+  std::cout << n[1].data;
+  delNote(n, 1);
+  std::cout << n[1].data;
   return 0;
 }
