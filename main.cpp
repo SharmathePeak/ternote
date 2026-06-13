@@ -34,6 +34,18 @@ public:
   }
 };
 
+void initNotes(std::vector<Notes> &n) {
+  std::ifstream ifile("test.txt");
+  std::string line;
+  while (std::getline(ifile, line)) {
+    if (line == "--NOTE--") {
+      n.emplace_back();
+    } else {
+      n.back().data += line + '\n';
+    }
+  }
+}
+
 void loadAllData() {
   int i = 0;
   int fl = false;
@@ -77,8 +89,8 @@ void loadData(std::vector<Notes> &n, int nn) {
 
 int main() {
   std::vector<Notes> n;
-  clearAllData();
-  addNote(n);
+  // clearAllData();
+  initNotes(n);
   addNote(n);
   addNote(n);
   loadData(n, 1);
